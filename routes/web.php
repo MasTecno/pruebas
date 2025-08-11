@@ -13,7 +13,7 @@ Route::get('/samito', function () {
 
 
 Route::get('/pruebas', function () {
-    return view('prueba');
+    return view("manteClientes.index");
 });
 
 Route::get('/pruebas2', function () {
