@@ -1,4 +1,4 @@
-/---*****<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -11,45 +11,56 @@
 <body>
     
     <section class="min-h-screen flex justify-center items-center">
-        <form class="bg-slate-50 p-12 rounded shadow-md w-full max-w-md md:max-w-xl">
+        <form method="POST" action="{{ route("login.store") }}" class="bg-slate-50 p-12 rounded shadow-md w-full max-w-md md:max-w-xl">
+            @csrf
             <div class="mb-4">
-                <label for="server" class="p-1 font-medium">Servidor</label>
+                <label for="servidor" class="pb-1 text-sm font-medium">Servidor</label>
                 <input
                     type="text"
-                    name="server"
-                    id="server"
+                    name="servidor"
+                    id="servidor"
                     placeholder="Ingresa servidor"
-                    class="w-full p-2 mt-1 border bg-white border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    class="w-full p-1.5 mt-1 border bg-white border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
             </div>
 
             <div class="mb-4">
-                <label for="email" class="p-1 font-medium">Correo Electronico</label>
+                <label for="email" class="pb-1 text-sm font-medium">Correo Electronico</label>
                 <input
                     type="email"
                     name="email"
                     id="email"
                     placeholder="Ingresa correo"
-                    class="w-full p-2 mt-1 border bg-white border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    class="w-full p-1.5 mt-1 border bg-white border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
             </div>
 
             <div class="mb-4">
-                <label for="password" class="p-1 font-medium">Contraseña</label>
+                <label for="password" class="pb-1 text-sm font-medium">Contraseña</label>
                 <input
                     type="password"
                     name="password"
                     id="password"
                     placeholder="Ingresa contraseña"
-                    class="w-full p-2 mt-1 border bg-white border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    class="w-full p-1.5 mt-1 border bg-white border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
             </div>
 
             <div class="mt-6">
-                <button type="submit" class="w-full p-2 bg-green-400 hover:bg-green-500 text-white font-medium rounded-2xl cursor-pointer">
+                <x-buttons.green type="submit">
                     Ingresar
-                </button>
+                </x-buttons.green>  
             </div>
+
+            {{-- <div class="mt-4 flex items-center border rounded border-slate-200">
+                <label class="pl-2.5 pr-2.5 pt-1.5 pb-1.5 bg-slate-200 rounded-l" for="rut">
+                    Rut
+                </label>
+                <input class= "bg-white flex-1 w-100 focus:outline-none focus:ring-2 focus:ring-slate-300 p-1.5 rounded-r" 
+                name="rut" id="rut">
+            </div> --}}
+
+            
             
         </form>
     </section>
