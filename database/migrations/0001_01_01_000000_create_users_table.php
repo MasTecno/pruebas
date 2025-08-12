@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string("base");
             $table->string("usuario");
             $table->string("password");
+            $table->unsignedBigInteger("id_plan");
+            $table->foreign("id_plan", "fk_servidores_planes")->references("id")->on("planes");
             $table->string("estado");
             $table->timestamps();
         });

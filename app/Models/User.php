@@ -45,4 +45,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function plan(){
+        return $this->belongsTo(Plan::class, "id_plan");
+    }
+
+    public function conexiones() {
+        return $this->hasMany(ServerConexiones::class, "id_server");
+    }
+
 }
