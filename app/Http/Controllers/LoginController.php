@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Modulo;
+use App\Models\PlanModulo;
+use App\Models\ServerConexiones;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,10 +23,8 @@ class LoginController extends Controller
             "password" => ["required"]
         ]);
 
-        $union = DB::connection("pruebas_laravel")
-        ->table("users")
-        ->where("nombre", $request->servidor)
-        ->first();
+        $union = User::where("nombre", $request->servidor)->first();
+        
 
         if (!$union) {
             return response()->json([
@@ -31,7 +33,6 @@ class LoginController extends Controller
             ], 404);
         }
 
-        // dd($union);
         session(["unionServer" => $union]);
 
         $config = [
