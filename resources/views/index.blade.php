@@ -21,6 +21,7 @@
                     id="servidor"
                     placeholder="Ingresa servidor"
                     class="w-full p-1.5 mt-1 border bg-white border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
+                    value="{{ old("servidor") }}"
                 >
             </div>
 
@@ -32,6 +33,7 @@
                     id="email"
                     placeholder="Ingresa correo"
                     class="w-full p-1.5 mt-1 border bg-white border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
+                    value="{{ old("email") }}"
                 >
             </div>
 
@@ -45,6 +47,12 @@
                     class="w-full p-1.5 mt-1 border bg-white border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
             </div>
+
+            @if (session("error"))
+                <p class="text-center p-1 bg-red-200 border border-red-400 rounded text-sm font-semibold">
+                    Credenciales incorrectas
+                </p>
+            @endif
 
             <div class="mt-6">
                 <x-buttons.green type="submit">

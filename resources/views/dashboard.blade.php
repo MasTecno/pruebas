@@ -11,16 +11,17 @@
 
     @php
         $usuario = session("usuario_autenticado");
+        $conta = session("conta");
     @endphp
 
     <main class="container mx-auto px-4 py-10 bg-white shadow-lg rounded-md">    
-        <h4 class="text-center mb-4 font-semibold">Bienvenido {{ $usuario->nombre }} {{ $usuario->apellido_paterno }}</h4>
+        <h4 class="text-center mb-4 font-semibold">Bienvenido {{ $usuario->nombre }}</h4>
 
         <h6 class="text-center mb-6">Selecciona un modulo</h6>
 
         <section class="flex justify-evenly items-center">
             <div class="p-4 rounded-md border border-slate-200 hover:bg-slate-100 shadow">
-                <a href="#" class="text-slate-500 font-bold p-4">Contabilidad</a>
+                <button class="text-slate-500 font-bold p-4">Contabilidad</button>
             </div>
             <div class="p-4 rounded-md border border-slate-200 hover:bg-slate-100 shadow">
                 <a href="#" class="text-slate-500 font-bold p-4">Remuneraciones</a>
@@ -31,5 +32,18 @@
         </section>
 
     </main>
+
+    <script>
+
+        function handleFetchErrors(response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }
+
+
+
+    </script>
 </body> 
 </html>

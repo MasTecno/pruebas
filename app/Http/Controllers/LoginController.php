@@ -23,50 +23,87 @@ class LoginController extends Controller
             "password" => ["required"]
         ]);
 
-        $union = User::where("nombre", $request->servidor)->first();
-        
+        $union =  DB::connection("toribio")->table("users")
+        ->where("nombre", $request->servidor)->first();
 
         if (!$union) {
-            return response()->json([
-                "error" => true,
-                "message" => "Servidor no encontrado"
-            ], 404);
+            // return response()->json([
+            //     "error" => true,
+            //     "message" => "No se encontro el servidor"
+            // ], 404);
+
+            return back()->with("error", "Credenciales incorrectas");
+        }
+
+        $columnas = DB::connection("toribio")->select("
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = 'users'
+            AND COLUMN_NAME LIKE 'nom_bd_%'
+        ");
+
+        $sufijos = [];
+        foreach ($columnas as $col) {
+            $nombre = str_replace("nom_bd_", "", $col->COLUMN_NAME);
+            $sufijos[] = $nombre;
+        }
+
+        // dd($sufijos);
+
+        $configs = [];
+        foreach ($sufijos as $sufijo) {
+            if (empty($union->{"nom_bd_" . $sufijo})) {
+                continue;
+            }
+
+            $configs[$sufijo] = [
+                "driver"    => "mysql",
+                "host"      => "127.0.0.1",
+                "port"      => "3306",
+                "database"  => $union->{"nom_bd_" . $sufijo},
+                "username"  => $union->usuario_bd,
+                "password"  => $union->password_bd,
+                "charset"   => "utf8mb4",
+                "collation" => "utf8mb4_unicode_ci",
+                "prefix"    => "",
+            ];
         }
 
         session(["unionServer" => $union]);
 
-        $config = [
-            "driver"    => "mysql",
-            "host"      => "127.0.0.1",
-            "port"      => "3306",
-            "database"  => $union->base,
-            "username"  => "root",
-            "password"  => "root",
-            "charset"   => "utf8mb4",
-            "collation" => "utf8mb4_unicode_ci",
-            "prefix"    => "",
-        ];
-
-        session(["serverCliente" => $config]);
-
         //* Limpiar conexiones anteriores en caso de existir
-        DB::purge("cliente_actual");
-        config(["database.connections.cliente_actual" => $config]);
 
-        $usuario = DB::connection("cliente_actual")
+        $usuario_autenticado = null;
+        foreach ($configs as $sufijo => $config) {      
+            DB::purge("cliente_{$sufijo}");
+            config(["database.connections.cliente_{$sufijo}" => $config]);
+
+            session(["{$sufijo}" => $config]);
+
+            $usuario = DB::connection("cliente_{$sufijo}")
             ->table("usuarios")
-            ->where("email", $request->email)
-            ->where("password", $request->password)
+                ->where("email", $request->email)
+                ->where("password", $request->password)
             ->first();
 
-        if (!$usuario) {
-            return response()->json([
-                "success" => false,
-                "message" => "Credenciales incorrectas"
-            ], 404);
+            if($usuario) {
+                $usuario_autenticado = $usuario;
+                break;
+            }
         }
 
-        session(["usuario_autenticado" => $usuario]);
+        if (!$usuario_autenticado) {
+            // return response()->json([
+            //     "success" => false,
+            //     "message" => "Credenciales incorrectas"
+            // ], 403);
+            return back()->with("error", "Credenciales incorrectas");
+        }
+
+        session([
+            "usuario_autenticado" => $usuario_autenticado
+        ]);
+
 
         return redirect()->route("dashboard");
 

@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string("uuid", 50);
             $table->string("nombre");
-            $table->string("alias");
-            $table->string("base");
-            $table->string("usuario");
-            $table->string("password");
-            $table->unsignedBigInteger("id_plan");
-            $table->foreign("id_plan", "fk_servidores_planes")->references("id")->on("planes");
+            $table->string("rut");
+            $table->string("usuario_bd");
+            $table->string("password_bd");
+            $table->string("nom_bd_conta");
+            $table->string("nom_bd_remu");
+            $table->string("nom_bd_renta");
             $table->string("estado");
             $table->timestamps();
         });
