@@ -1,23 +1,22 @@
 <?php
 
+use App\Http\Controllers\ContabilidadController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RemuneracionesController;
+use App\Http\Middleware\VerificarSesionUsuario;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/", [LoginController::class, "index"])->name("login.index");
 Route::post("/", [LoginController::class, "store"])->name("login.store");
-
-Route::get("/dashboard", [DashboardController::class, "index"])->name("dashboard");
-
-// Route::get('/samito', function () {
-//     return view('samito');
-// });
+Route::post("/logout", [LoginController::class, "logout"])->name("logout");
 
 
-// Route::get('/pruebas', function () {
-//     return view("manteClientes.index");
-// });
+Route::middleware([VerificarSesionUsuario::class])->group(function () {
 
-// Route::get('/pruebas2', function () {
-//     return view('prueba');
-// });
+    Route::get("/dashboard", [DashboardController::class, "index"])->name("dashboard");
+    Route::get("/contabilidad", [ContabilidadController::class, "index"])->name("contabilidad.index");
+    Route::get("/remu", [RemuneracionesController::class, "index"])->name("remu.index");    
+
+});
+

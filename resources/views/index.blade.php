@@ -50,7 +50,7 @@
 
             @if (session("error"))
                 <p class="text-center p-1 bg-red-200 border border-red-400 rounded text-sm font-semibold">
-                    Credenciales incorrectas
+                    {{ session("error") }}
                 </p>
             @endif
 

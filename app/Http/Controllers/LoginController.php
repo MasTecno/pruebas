@@ -35,6 +35,8 @@ class LoginController extends Controller
             return back()->with("error", "Credenciales incorrectas");
         }
 
+        // dd($union);
+
         $columnas = DB::connection("toribio")->select("
             SELECT COLUMN_NAME
             FROM INFORMATION_SCHEMA.COLUMNS
@@ -48,14 +50,11 @@ class LoginController extends Controller
             $sufijos[] = $nombre;
         }
 
-        // dd($sufijos);
+        
 
         $configs = [];
-        foreach ($sufijos as $sufijo) {
-            if (empty($union->{"nom_bd_" . $sufijo})) {
-                continue;
-            }
 
+        foreach ($sufijos as $sufijo) {
             $configs[$sufijo] = [
                 "driver"    => "mysql",
                 "host"      => "127.0.0.1",
@@ -66,46 +65,66 @@ class LoginController extends Controller
                 "charset"   => "utf8mb4",
                 "collation" => "utf8mb4_unicode_ci",
                 "prefix"    => "",
-            ];
+            ];    
         }
+        
 
+        // dd($sufijos);
         session(["unionServer" => $union]);
 
-        //* Limpiar conexiones anteriores en caso de existir
-
+        
         $usuario_autenticado = null;
-        foreach ($configs as $sufijo => $config) {      
+        $modulos_autenticados = [];
+        $accesos = [];
+        foreach ($configs as $sufijo => $config) {
             DB::purge("cliente_{$sufijo}");
+            // echo "cliente_{$sufijo}";
             config(["database.connections.cliente_{$sufijo}" => $config]);
 
-            session(["{$sufijo}" => $config]);
+            try {
+                $usuario = DB::connection("cliente_{$sufijo}")
+                    ->table("usuarios")
+                    ->where("email", $request->email)
+                    ->where("password", $request->password)
+                    ->first();
 
-            $usuario = DB::connection("cliente_{$sufijo}")
-            ->table("usuarios")
-                ->where("email", $request->email)
-                ->where("password", $request->password)
-            ->first();
+                if(!$usuario) {
+                    echo "No tiene usuario en $sufijo";
+                    continue;
+                }else{
+                    $usuario_autenticado = $usuario;
+                    $modulos_autenticados[$sufijo] = $config;
+                    $accesos[$sufijo] = "Si";
+                }
 
-            if($usuario) {
-                $usuario_autenticado = $usuario;
-                break;
+            } catch (\Exception $e) {
+                dd("Error en modulo {$sufijo}: " . $e->getMessage());
             }
         }
 
-        if (!$usuario_autenticado) {
-            // return response()->json([
-            //     "success" => false,
-            //     "message" => "Credenciales incorrectas"
-            // ], 403);
-            return back()->with("error", "Credenciales incorrectas");
-        }
+       
+
+        // if (empty($modulos_autenticados)) {
+        //     return back()->with("error", "Sin acceso a modulos");
+        // }
 
         session([
-            "usuario_autenticado" => $usuario_autenticado
-        ]);
+            "usuario_autenticado" => $usuario_autenticado,
+            "modulos_autenticados" => $modulos_autenticados,
+            "accesos" => $accesos
+        ]); 
+        
 
-
+        // dd(session()->all());
+        // exit;
         return redirect()->route("dashboard");
 
+    }
+
+    public function logout(Request $request) {
+
+        $request->session()->flush();
+        return redirect()->route("login.index");
+        
     }
 }
