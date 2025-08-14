@@ -10,19 +10,22 @@
 
 @section("contenido")
 
+
+
     @php
         $usuario = session("usuario_autenticado");
     @endphp
-
-    <div class="min-h-screen flex justify-center items-center">
+    <h4 class="text-start pl-6 mt-4 mb-4 font-semibold">Bienvenido {{ $usuario->nombre }} {{ $usuario->ape_paterno }}</h4>
+    
+    <div class="flex sm:flex-col flex-col md:justify-center items-center mt-10 mb-10">
 
 
         <div class="container mx-auto px-4 py-10 bg-white shadow-lg rounded-md">    
-            <h4 class="text-center mb-4 font-semibold">Bienvenido {{ $usuario->nombre }}</h4>
+            
 
-            <h6 class="text-center mb-6">Selecciona un modulo</h6>
+            <h4 class="text-center text-lg font-medium mb-6">Selecciona un modulo</h4>
 
-            <section class="flex justify-evenly items-center">
+            <section class="flex flex-col md:flex-row gap-6 justify-evenly items-center">
                 <div class="w-50 rounded-md border border-slate-200 hover:bg-slate-100 shadow">
                     <button type="button" class="w-full text-slate-500 font-bold p-6 cursor-pointer" id="btn-conta" 
                     data-route="{{ route("contabilidad.index") }}">
