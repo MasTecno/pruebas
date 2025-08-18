@@ -56,7 +56,7 @@
 
             <div class="mt-6">
                 <x-buttons.green type="submit">
-                    Ingresar
+                    Iniciar sesión
                 </x-buttons.green>  
             </div>
 

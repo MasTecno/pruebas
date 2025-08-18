@@ -26,22 +26,21 @@
             <h4 class="text-center text-lg font-medium mb-6">Selecciona un modulo</h4>
 
             <section class="flex flex-col md:flex-row gap-6 justify-evenly items-center">
-                <div class="w-50 rounded-md border border-slate-200 hover:bg-slate-100 shadow">
-                    <button type="button" class="w-full text-slate-500 font-bold p-6 cursor-pointer" id="btn-conta" 
+                <div class="w-50 h-50 rounded-md border border-slate-200 hover:bg-slate-100 shadow">
+                    <button type="button" class="w-full h-full text-slate-500 font-bold p-6 cursor-pointer" id="btn-conta" 
                     data-route="{{ route("contabilidad.index") }}">
                         Contabilidad
                     </button>
                 </div>
-                <div class="w-50 rounded-md border border-slate-200 hover:bg-slate-100 shadow">
-                    <button type="button" class="w-full text-slate-500 font-bold p-6 cursor-pointer" id="btn-remu"
+                <div class="w-50 h-50 rounded-md border border-slate-200 hover:bg-slate-100 shadow">
+                    <button type="button" class="w-full h-full text-slate-500 font-bold p-6 cursor-pointer" id="btn-remu"
                     data-route="{{ route("remu.index") }}">
                         Remuneraciones
                     </button>
                 </div>
-                <div class="w-50 rounded-md">
-                    <button type="button" class="w-full text-slate-500 font-bold p-6 
-                    shadow border border-slate-200 rounded cursor-pointer" 
-                    id="btn-renta">
+                <div class="w-50 h-50 rounded-md border border-slate-200 hover:bg-slate-100 shadow">
+                    <button type="button" class="w-full h-full text-slate-500 font-bold p-6 cursor-pointer" id="btn-renta"
+                    data-route="{{ route("renta.index") }}">
                         Renta
                     </button>
                 </div>
