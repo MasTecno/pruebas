@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Indicadores;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -18,6 +19,8 @@ class ContabilidadController extends Controller
         $user = $acceso["conta"]["username"];
         $password = $acceso["conta"]["password"];
 
+        $indicadores = Indicadores::latest()->first();
+
         $data = [
             "email" => $usuario->email,
             "clave" => $usuario->password,
@@ -26,7 +29,8 @@ class ContabilidadController extends Controller
             "password" => $password,
             "modulo" => "contabilidad",
             "emision" => time(),
-            "expiracion" => time() + 3600
+            "expiracion" => time() + 3600,
+            "indicadores" => $indicadores
         ];
 
         $privateKeyPath = base_path("keys/private.pem");
